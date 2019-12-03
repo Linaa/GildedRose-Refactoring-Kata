@@ -45,7 +45,7 @@ class GildedRoseTest(unittest.TestCase):
 
     # "Aged Brie" actually increases in Quality the older it gets    
     def test_aged_brie_increases_in_quality(self):
-        items = [Item("Aged Brie", 5, 1)]
+        items = [Item(Item.BRIE, 5, 1)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(4, items[0].sell_in)
@@ -53,8 +53,8 @@ class GildedRoseTest(unittest.TestCase):
 
 
     # The Quality of an item is never more than 50    
-    def test_aged_brie_increases_in_quality(self):
-        items = [Item("Aged Brie", 5, 49)]
+    def test_quality_never_more_than_50(self):
+        items = [Item(Item.BRIE, 5, 49)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(4, items[0].sell_in)
@@ -66,7 +66,7 @@ class GildedRoseTest(unittest.TestCase):
 
     # "Sulfuras", being a legendary item, never has to be sold or decreases in Quality 
     def test_sulfuras_legendary_item(self):
-        items = [Item("Sulfuras, Hand of Ragnaros", 5, 49)]
+        items = [Item(Item.SULFURAS, 5, 49)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(5, items[0].sell_in)
@@ -77,7 +77,7 @@ class GildedRoseTest(unittest.TestCase):
     # Quality drops to 0 after the concert
     def test_backstage_passes_increases_in_quality(self):
         
-        items = [Item("Backstage passes to a TAFKAL80ETC concert", 11, 34)]
+        items = [Item(Item.BACKSTAGE, 11, 34)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(10, items[0].sell_in)
@@ -116,7 +116,7 @@ class GildedRoseTest(unittest.TestCase):
     # "Conjured" items degrade in Quality twice as fast as normal items
     def test_conjured_items_degrade_twice(self):
         
-        items = [Item("Conjured", 11, 34)]
+        items = [Item(Item.CONJURED, 11, 34)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
         self.assertEqual(10, items[0].sell_in)
