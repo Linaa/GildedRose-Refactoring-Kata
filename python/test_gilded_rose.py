@@ -66,11 +66,61 @@ class GildedRoseTest(unittest.TestCase):
 
     # "Sulfuras", being a legendary item, never has to be sold or decreases in Quality 
     def test_sulfuras_legendary_item(self):
-        items = [Item("Sulfuras", 5, 49)]
+        items = [Item("Sulfuras, Hand of Ragnaros", 5, 49)]
         gilded_rose = GildedRose(items)
         gilded_rose.update_quality()
-        self.assertEqual(4, items[0].sell_in)
+        self.assertEqual(5, items[0].sell_in)
         self.assertEqual(49, items[0].quality)
+
+    # "Backstage passes", like aged brie, increases in Quality as its SellIn value approaches
+    # Quality increases by 2 when there are 10 days or less and by 3 when there are 5 days or less but
+    # Quality drops to 0 after the concert
+    def test_backstage_passes_increases_in_quality(self):
+        
+        items = [Item("Backstage passes to a TAFKAL80ETC concert", 11, 34)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(10, items[0].sell_in)
+        self.assertEqual(35, items[0].quality)
+
+        gilded_rose.update_quality()
+        self.assertEqual(9, items[0].sell_in)
+        self.assertEqual(37, items[0].quality)
+
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+        self.assertEqual(5, items[0].sell_in)
+        self.assertEqual(45, items[0].quality)
+
+        gilded_rose.update_quality()
+        self.assertEqual(4, items[0].sell_in)
+        self.assertEqual(48, items[0].quality)
+
+        gilded_rose.update_quality()
+
+        self.assertEqual(3, items[0].sell_in)
+        self.assertEqual(50, items[0].quality)
+
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+        gilded_rose.update_quality()
+        self.assertEqual(0, items[0].sell_in)
+        self.assertEqual(50, items[0].quality)
+
+        gilded_rose.update_quality()
+        self.assertEqual(-1, items[0].sell_in)
+        self.assertEqual(0, items[0].quality)
+
+    # "Conjured" items degrade in Quality twice as fast as normal items
+    def test_conjured_items_degrade_twice(self):
+        
+        items = [Item("Conjured", 11, 34)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEqual(10, items[0].sell_in)
+        self.assertEqual(32, items[0].quality)
 
 
 if __name__ == '__main__':
